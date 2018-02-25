@@ -8,11 +8,6 @@ const app = express();
 const GameModel = require('./models/game');
 const SystemModel = require('./models/system');
 
-const router = express.Router();
-router.get('/', (req,res) => {
-    res.json({ message: 'Welcome to the Internet Video Game Database' });
-});
-
 mongoose.connect(`mongodb://${server}/${database}`)
     .then( () => {
         console.log('MongoDB Connection Successful');
@@ -21,11 +16,21 @@ mongoose.connect(`mongodb://${server}/${database}`)
         console.error('MongoDB Connection Error: ' + err);
     });
 
-app.use('/api', router);
+/** 
+ * Main Route
+ * http://domain/api
+**/
+const APIRoute = require('./routes/api');
+app.use('/api', APIRoute);
 
+/**
+ * Systems Route
+ * http://domain/api/system
+**/
 const SystemRoute = require('./routes/system');
 app.use('/api/system', SystemRoute);
 
+// Attach the express app to port:
 app.listen(port);
 
 
@@ -128,6 +133,7 @@ sampleGame.save()
     });
 */
 
+/*
 GameModel.findOne({slug: "mortal-kombat"})
 .populate('systems')
 .exec( (err, game) => {
@@ -135,7 +141,7 @@ GameModel.findOne({slug: "mortal-kombat"})
     console.log( game );
 });
 
-
+*/
 
 
 /*
