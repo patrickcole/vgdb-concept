@@ -3,6 +3,8 @@ const app = express();
 const port = 3000;
 
 const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const GameModel = require('./models/game');
 const SystemModel = require('./models/system');
@@ -17,9 +19,6 @@ mongoose.connect(`mongodb://${server}/${database}`)
     .catch( (err) => {
         console.error('MongoDB Connection Error: ' + err);
     });
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 /** 
  * Main Route
@@ -45,15 +44,8 @@ app.use('/api/system', SystemRoute);
 // Attach the express app to port:
 app.listen(port);
 
-/*
-SystemModel.remove()
-    .then( res => {
-        console.log('removed all systems')
-    })
-    .catch( err => {
-        console.error('error in removing systems');
-    })
-*/
+
+// SAMPLE: Remove a game with the slug "mortal-kombat"
 /*
 GameModel
     .findOneAndRemove(
@@ -71,8 +63,7 @@ GameModel
     });
 */
 
-
-
+// SAMPLE: Find all systems
 /*
 SystemModel.find({}, (err, systems) => {
 
@@ -80,6 +71,7 @@ SystemModel.find({}, (err, systems) => {
 });
 */
 
+// SAMPLE: Create two sample systems:
 /*
 let snesSystem = new SystemModel({
     slug: "snes",
@@ -108,12 +100,7 @@ genesisSystem.save()
     });
 */
 
-/*
-SystemModel.find({}, (err, systems) => {
-    console.log( systems );
-})
-*/
-
+// EXAMPLE: Create a sample game and add the two sample systems as objectid references
 /*
 let sampleGame = new GameModel({
     slug: "mortal-kombat",
@@ -136,23 +123,5 @@ sampleGame.save()
     })
     .catch( (err) => {
         console.error('Error with saving a Game');
-    });
-*/
-
-/*
-GameModel
-    .findOneAndUpdate(
-        { 
-            slug: 'mortal-kombat' 
-        },
-        {
-            systems: ['5a91da7cf347d2177dd163e8', '5a91da7cf347d2177dd163e9']
-        }
-    ).then( doc => {
-
-        console.log( doc )
-    }).catch ( err => {
-
-        console.error( err );
     });
 */
