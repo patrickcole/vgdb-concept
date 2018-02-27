@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const model = require('../models/game');
 
+const GAME_NOT_FOUND = { message: "Game not found." };
+
 // /api/game
 router
     .route('/')
@@ -38,8 +40,17 @@ router
             if ( req.game ){
                 res.json(req.game);
             } else {
-                res.status(404).send({ message: "Game not found" });
+                res.status(404).send(GAME_NOT_FOUND);
             }
+        })
+        .put( (req,res) => {
+          if(req.game){
+            req.game.title = req.body.title;
+            req.game.save();
+            res.json(req.game);
+          } else {
+            res.status(404).send(GAME_NOT_FOUND);
+          }
         });
 
 module.exports = router;
