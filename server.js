@@ -1,13 +1,17 @@
 const express = require('express');
-const mongoose = require('mongoose');
-const server = '127.0.0.1:27017';
-const database = 'vgdb';
+const app = express();
 const port = 3000;
 
-const app = express();
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 const GameModel = require('./models/game');
 const SystemModel = require('./models/system');
 
+const mongoose = require('mongoose');
+const server = '127.0.0.1:27017';
+const database = 'vgdb';
 mongoose.connect(`mongodb://${server}/${database}`)
     .then( () => {
         console.log('MongoDB Connection Successful');
@@ -24,6 +28,13 @@ const APIRoute = require('./routes/api');
 app.use('/api', APIRoute);
 
 /**
+ * Games Route
+ * http://domain/api/game
+**/
+const GameRoute = require('./routes/game');
+app.use('/api/game', GameRoute);
+
+/**
  * Systems Route
  * http://domain/api/system
 **/
@@ -34,15 +45,7 @@ app.use('/api/system', SystemRoute);
 app.listen(port);
 
 
-/*
-SystemModel.remove()
-    .then( res => {
-        console.log('removed all systems')
-    })
-    .catch( err => {
-        console.error('error in removing systems');
-    })
-*/
+// SAMPLE: Remove a game with the slug "mortal-kombat"
 /*
 GameModel
     .findOneAndRemove(
@@ -60,13 +63,7 @@ GameModel
     });
 */
 
-/* Get Games Example
-GameModel.find({}, (err, games) => {
-
-    console.log( games );
-})
-*/
-
+// SAMPLE: Find all systems
 /*
 SystemModel.find({}, (err, systems) => {
 
@@ -74,6 +71,7 @@ SystemModel.find({}, (err, systems) => {
 });
 */
 
+// SAMPLE: Create two sample systems:
 /*
 let snesSystem = new SystemModel({
     slug: "snes",
@@ -102,12 +100,7 @@ genesisSystem.save()
     });
 */
 
-/*
-SystemModel.find({}, (err, systems) => {
-    console.log( systems );
-})
-*/
-
+// EXAMPLE: Create a sample game and add the two sample systems as objectid references
 /*
 let sampleGame = new GameModel({
     slug: "mortal-kombat",
@@ -130,34 +123,5 @@ sampleGame.save()
     })
     .catch( (err) => {
         console.error('Error with saving a Game');
-    });
-*/
-
-/*
-GameModel.findOne({slug: "mortal-kombat"})
-.populate('systems')
-.exec( (err, game) => {
-    
-    console.log( game );
-});
-
-*/
-
-
-/*
-GameModel
-    .findOneAndUpdate(
-        { 
-            slug: 'mortal-kombat' 
-        },
-        {
-            systems: ['5a91da7cf347d2177dd163e8', '5a91da7cf347d2177dd163e9']
-        }
-    ).then( doc => {
-
-        console.log( doc )
-    }).catch ( err => {
-
-        console.error( err );
     });
 */
