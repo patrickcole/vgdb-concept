@@ -51,6 +51,19 @@ router
           } else {
             res.status(404).send(GAME_NOT_FOUND);
           }
+        })
+        .delete( (req,res) => {
+          if(req.game){
+            req.game.remove( err => {
+                if(err){
+                    res.status(500).send(err)
+                } else {
+                    res.status(200).send({ message: 'Game was removed.'});
+                }
+            })
+          } else {
+            res.status(404).send(GAME_NOT_FOUND);
+          }
         });
 
 module.exports = router;
